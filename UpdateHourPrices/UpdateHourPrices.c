@@ -100,16 +100,16 @@ int main() {
 			lastHour = hourNow;
 			retry = 0;
 
-			char* prices = getinputtext(0);
+			char* scores = getinputtext(0);
 
-			printf("%s", prices);
+			printf("%s", scores);
 
 			setoutput(HourNow, hourNow);
 
 			char scoreOfHour[80];
 			sprintf(scoreOfHour, "\"ScoreOfHour%d\": ", hourNow);
 
-			float score = readvalue(prices, scoreOfHour);
+			float score = readvalue(scores, scoreOfHour);
 
 			if (score != -100)
 			{
@@ -119,6 +119,8 @@ int main() {
 			{
 				retry = 1;
 			}
+
+			char* prices = getinputtext(1);
 
 			char priceOfHour[80];
 			sprintf(priceOfHour, "\"PriceOfHour%d\": ", hourNow);
