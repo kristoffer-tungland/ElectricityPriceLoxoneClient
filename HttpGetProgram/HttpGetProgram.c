@@ -39,25 +39,47 @@ int getinput(int port)
 
 // Copy script from here
 
-void setHourScores(char* result)
+void setHourScores(char* result, int hourScorePos, int hourPricesPos)
+{
+	int lenght = hourPricesPos - hourScorePos;
+	char* hourScoreStemp = calloc(1, lenght * sizeof(char));
+
+	strncpy(hourScoreStemp, result + hourScorePos, lenght);
+
+	printf("stemp: %s", hourScoreStemp);
+
+	setoutputtext(0, hourScoreStemp);
+
+	free(hourScoreStemp);
+	hourScoreStemp = 0;
+}
+
+void setHourPrices(char* result, int hourPricesPos)
+{
+	int resultLenght = strlen(result);
+	int lenght = resultLenght - hourPricesPos;
+	char* hourPriceStemp = calloc(1, resultLenght * sizeof(char));
+
+	strncpy(hourPriceStemp, result + hourPricesPos, lenght);
+
+	printf("stemp: %s", hourPriceStemp);
+
+	setoutputtext(1, hourPriceStemp);
+
+	free(hourPriceStemp);
+	hourPriceStemp = 0;
+}
+
+
+void splitOutputs(char* result)
 {
 	int hourScorePos = strfind(result, "\"HourScores\":", 0);
 	int hourPricesPos = strfind(result, "\"HourPrices\":", 0);
 
-
 	if (hourScorePos > 0 && hourPricesPos > 0)
 	{
-		int lenght = hourPricesPos-hourScorePos;
-		char* stemp = calloc(1, 10);
-
-		strncpy(stemp, result + hourScorePos, lenght);
-
-		printf("stemp: %s", stemp);
-
-		setoutputtext(0, result);
-
-		free(stemp);
-		stemp = 0;
+		setHourScores(result, hourScorePos, hourPricesPos);
+		setHourPrices(result, hourPricesPos);
 	}
 }
 
@@ -66,10 +88,10 @@ void getPrice(char* endpoint)
 	char* host = "electricitypriceapi.azurewebsites.net";
 
 	char* result = httpget(host, endpoint);
-	
+
 	if (result != 0)
 	{
-		setHourScores(result);
+		splitOutputs(result);
 	}
 
 	// Un-comment free()
