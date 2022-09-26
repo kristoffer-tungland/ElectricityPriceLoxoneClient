@@ -123,7 +123,7 @@ int getMinuteNow()
 // delete main for use it in picoc script
 int main()
 {
-	int lastHour = -1;
+	int refreshed = 0;
 
 	getTodaysPrice();
 
@@ -132,14 +132,15 @@ int main()
 		int hourNow = getHourNow();
 		int minuteNow = getMinuteNow();
 
-		if (lastHour != hourNow)
+		if (refreshed == 1 && hourNow == 0)
 		{
-			lastHour = hourNow;
+			refreshed = 0;
+		}
 
-			if (hourNow == 23 && minuteNow > 30)
-			{
-				getTomorowsPrice();
-			}
+		if (hourNow == 23 && minuteNow > 30 && refreshed == 0)
+		{
+			getTomorowsPrice();
+			refreshed = 1;
 		}
 
 		// Slow the loop down 10 minutes
