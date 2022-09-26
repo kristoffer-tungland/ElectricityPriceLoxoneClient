@@ -51,62 +51,65 @@ float readvalue(char* result, char* name)
 	return value;
 }
 
+// Delete main
 int main() {
+// Delete main
 
-	int lastHour = -1;
-	int retry = 0;
+int lastHour = -1;
+int retry = 0;
 
-	while (TRUE)
+while (TRUE)
+{
+	int hourNow = getHourNow();
+	int minuteNow = getMinuteNow();
+
+	if (lastHour != hourNow || retry == 1)
 	{
-		int hourNow = getHourNow();
-		int minuteNow = getMinuteNow();
+		lastHour = hourNow;
+		retry = 0;
 
-		if (lastHour != hourNow || retry == 1)
+		char* scores = getinputtext(0);
+
+		printf("%s", scores);
+
+		setoutput(HourNow, hourNow);
+
+		char scoreOfHour[80];
+		sprintf(scoreOfHour, "\"ScoreOfHour%d\": ", hourNow);
+
+		float score = readvalue(scores, scoreOfHour);
+
+		if (score != -100)
 		{
-			lastHour = hourNow;
-			retry = 0;
-
-			char* scores = getinputtext(0);
-
-			printf("%s", scores);
-
-			setoutput(HourNow, hourNow);
-
-			char scoreOfHour[80];
-			sprintf(scoreOfHour, "\"ScoreOfHour%d\": ", hourNow);
-
-			float score = readvalue(scores, scoreOfHour);
-
-			if (score != -100)
-			{
-				setoutput(ScoreNow, score);
-			}
-			else
-			{
-				retry = 1;
-			}
-
-			char* prices = getinputtext(1);
-
-			char priceOfHour[80];
-			sprintf(priceOfHour, "\"PriceOfHour%d\": ", hourNow);
-
-			float price = readvalue(prices, priceOfHour);
-
-			if (price != -100)
-			{
-				setoutput(PriceNow, price);
-			}
-			else
-			{
-				retry = 1;
-			}
+			setoutput(ScoreNow, score);
+		}
+		else
+		{
+			retry = 1;
 		}
 
-		// Slow the loop down 1 minutes
-		int sleepTime = 1 * 60 * 1000;
-		sleep(sleepTime);
+		char* prices = getinputtext(1);
+
+		char priceOfHour[80];
+		sprintf(priceOfHour, "\"PriceOfHour%d\": ", hourNow);
+
+		float price = readvalue(prices, priceOfHour);
+
+		if (price != -100)
+		{
+			setoutput(PriceNow, price);
+		}
+		else
+		{
+			retry = 1;
+		}
 	}
 
-	return 0;
+	// Slow the loop down 1 minutes
+	int sleepTime = 1 * 60 * 1000;
+	sleep(sleepTime);
 }
+
+// Delete main end
+}
+// Delete main end

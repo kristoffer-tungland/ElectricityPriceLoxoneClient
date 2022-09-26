@@ -85,33 +85,35 @@ int getMinuteNow()
 	return getinput(1);
 }
 
-// delete main for use it in picoc script
-int main()
+// Delete main
+int main() {
+// Delete main
+
+int refreshed = 0;
+
+getTodaysPrice();
+
+while (TRUE)
 {
-	int refreshed = 0;
+	int hourNow = getHourNow();
+	int minuteNow = getMinuteNow();
 
-	getTodaysPrice();
-
-	while (TRUE)
+	if (refreshed == 1 && hourNow == 0)
 	{
-		int hourNow = getHourNow();
-		int minuteNow = getMinuteNow();
-
-		if (refreshed == 1 && hourNow == 0)
-		{
-			refreshed = 0;
-		}
-
-		if (hourNow == 23 && minuteNow > 30 && refreshed == 0)
-		{
-			getTomorowsPrice();
-			refreshed = 1;
-		}
-
-		// Slow the loop down 10 minutes
-		int sleepTime = 10 * 60 * 1000;
-		sleep(sleepTime);
+		refreshed = 0;
 	}
 
-	return 0;
+	if (hourNow == 23 && minuteNow > 30 && refreshed == 0)
+	{
+		getTomorowsPrice();
+		refreshed = 1;
+	}
+
+	// Slow the loop down 10 minutes
+	int sleepTime = 10 * 60 * 1000;
+	sleep(sleepTime);
 }
+
+// Delete main end
+}
+// Delete main end
