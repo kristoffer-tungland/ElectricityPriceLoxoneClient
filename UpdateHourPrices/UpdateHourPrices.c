@@ -74,7 +74,7 @@ while (TRUE)
 
 		setoutput(HourNow, hourNow);
 
-		char scoreOfHour[80];
+		char scoreOfHour[20];
 		sprintf(scoreOfHour, "\"ScoreOfHour%d\": ", hourNow);
 
 		float score = readvalue(scores, scoreOfHour);
@@ -90,7 +90,7 @@ while (TRUE)
 
 		char* prices = getinputtext(1);
 
-		char priceOfHour[80];
+		char priceOfHour[20];
 		sprintf(priceOfHour, "\"PriceOfHour%d\": ", hourNow);
 
 		float price = readvalue(prices, priceOfHour);

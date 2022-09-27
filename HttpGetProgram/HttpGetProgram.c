@@ -65,7 +65,11 @@ void getPrice(char* endpoint)
 
 void getTodaysPrice()
 {
-	char* endpoint = "/api/PriceScoreToday?area=no2&currency=NOK";
+	char* area = "no2";
+	char* currency = "NOK";
+	char endpoint[60];
+	sprintf(endpoint, "/api/PriceScoreToday?area=%s&currency=%s", area, currency);
+	//char* endpoint = "/api/PriceScoreToday?area=no2&currency=NOK";
 	getPrice(endpoint);
 }
 
