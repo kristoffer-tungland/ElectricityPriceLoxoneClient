@@ -8,32 +8,24 @@
 void setHourScores(char* result, int hourScorePos, int hourPricesPos)
 {
 	int lenght = hourPricesPos - hourScorePos;
-	char* hourScore = calloc(1, lenght * sizeof(char));
+	char hourScore[1000];
 
 	strncpy(hourScore, result + hourScorePos, lenght);
-
-	printf("hourScore:\r\n%s\r\n", hourScore);
+	hourScore[lenght] = '\0';
 
 	setoutputtext(0, hourScore);
-
-	free(hourScore);
-	hourScore = 0;
 }
 
 void setHourPrices(char* result, int hourPricesPos)
 {
 	int resultLenght = strlen(result);
 	int lenght = resultLenght - hourPricesPos;
-	char* hourPrice = calloc(1, lenght * sizeof(char));
+	char hourPrice[1000];
 
 	strncpy(hourPrice, result + hourPricesPos, lenght);
-
-	printf("hourPrice:\r\n%s\r\n", hourPrice);
+	hourPrice[lenght] = '\0';
 
 	setoutputtext(1, hourPrice);
-
-	free(hourPrice);
-	hourPrice = 0;
 }
 
 
@@ -49,6 +41,27 @@ void splitOutputs(char* result)
 	}
 }
 
+void setCurrency(char* result)
+{
+	char* priceUnitKey = "\"PriceUnit\": \"";
+	int priceUnitPos = strfind(result, priceUnitKey, 0);
+	char* unit = "/kWh";
+	int unitPos = strfind(result, unit, 0);
+
+	if (priceUnitPos > 0 && unitPos > 0)
+	{
+		int priceUnitLenght = strlen(priceUnitKey);
+		int unitLenght = strlen(unit);
+		int lenght = (unitPos + unitLenght) - (priceUnitPos + priceUnitLenght);
+		char priceUnit[8];
+
+		strncpy(priceUnit, result + priceUnitPos + priceUnitLenght, lenght);
+		priceUnit[lenght] = '\0';
+
+		setoutputtext(2, priceUnit);
+	}
+}
+
 void getPrice(char* endpoint)
 {
 	char* host = "electricitypriceapi.azurewebsites.net";
@@ -58,24 +71,23 @@ void getPrice(char* endpoint)
 	if (result != 0)
 	{
 		splitOutputs(result);
+		setCurrency(result);
 	}
 
 	free(result);
 }
 
-void getTodaysPrice()
+void getTodaysPrice(char* area, char* currency)
 {
-	char* area = "no2";
-	char* currency = "NOK";
 	char endpoint[60];
 	sprintf(endpoint, "/api/PriceScoreToday?area=%s&currency=%s", area, currency);
-	//char* endpoint = "/api/PriceScoreToday?area=no2&currency=NOK";
 	getPrice(endpoint);
 }
 
-void getTomorowsPrice()
+void getTomorowsPrice(char* area, char* currency)
 {
-	char* endpoint = "/api/PriceScoreTomorrow?area=no2&currency=NOK";
+	char endpoint[60];
+	sprintf(endpoint, "/api/PriceScoreTomorrow?area=%s&currency=%s", area, currency);
 	getPrice(endpoint);
 }
 
@@ -93,9 +105,12 @@ int getMinuteNow()
 int main() {
 // Delete main
 
+char* area = "no2";
+char* currency = "NOK";
+
 int refreshed = 0;
 
-getTodaysPrice();
+getTodaysPrice(area, currency);
 
 while (TRUE)
 {
@@ -109,7 +124,7 @@ while (TRUE)
 
 	if (hourNow == 23 && minuteNow > 30 && refreshed == 0)
 	{
-		getTomorowsPrice();
+		getTomorowsPrice(area, currency);
 		refreshed = 1;
 	}
 
