@@ -79,6 +79,8 @@ while (TRUE)
 
 		float score = readvalue(scores, scoreOfHour);
 
+		free(scores);
+
 		if (score != -100)
 		{
 			setoutput(ScoreNow, score);
@@ -94,6 +96,8 @@ while (TRUE)
 		sprintf(priceOfHour, "\"PriceOfHour%d\": ", hourNow);
 
 		float price = readvalue(prices, priceOfHour);
+
+		free(prices);
 
 		if (price != -100)
 		{
