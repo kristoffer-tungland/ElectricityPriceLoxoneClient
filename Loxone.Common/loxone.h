@@ -1,17 +1,8 @@
 #pragma once
 
-char* httpget(char* adress, char* page);
-
 void getPrice(char* endpoint);
 
-int getinput(int port);
+int strfind(const char* haystack, const char* needle, int offset);
 
-char* strfind(const char* haystack, const char* needle, int offset);
 
-char* getinputtext(int port);
 
-void setoutputtext(int port, char value[]);
-
-void setoutput(int output, float value);
-
-void sleep(int milliseconds);

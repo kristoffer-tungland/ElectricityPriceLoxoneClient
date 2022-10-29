@@ -1,4 +1,9 @@
 #include "../Loxone.Common/loxone.h"
+#include "../Loxone.Common/loxoneExtended.h"
+#include "../Loxone.Common/loxoneHttp.h"
+#include "../Loxone.Common/loxoneTime.h"
+#include "../Loxone.Common/loxoneSps.h"
+
 #include <wtypes.h>
 #include <stdio.h>
 #include <string.h>
@@ -11,16 +16,6 @@ enum OutputPorts
 	HourNow,            // AQ2
 	PriceNow             // AQ3
 };
-
-int getHourNow()
-{
-	return getinput(0);
-}
-
-int getMinuteNow()
-{
-	return getinput(1);
-}
 
 float readvalue(char* result, char* name)
 {
@@ -58,10 +53,30 @@ int main() {
 int lastHour = -1;
 int retry = 0;
 
+unsigned int time = getcurrenttime();
+int year = getyear(time, 1);
+int month = getmonth(time, 1);
+int day = getday(time, 1);
+int hour = gethour(time, 1);
+unsigned int customtime = gettimeval(2022, 10, 29, 13, 27, 0, 1);
+
+char* response = httpget("https://electricitypriceapi.azurewebsites.net", "/api/AveragePrices?area=no2&currency=NOK&format=xml");
+
+char* average = getxmlvalue(response, 0, "Today");
+
+float input0 = getinput(0);
+
+printf("%f", input0);
+
+setlogtext(average);
+
+free(response);
+free(average);
+
 while (TRUE)
 {
-	int hourNow = getHourNow();
-	int minuteNow = getMinuteNow();
+	int hourNow = gethour(time, 1);
+	int minuteNow = getminute(time, 1);
 
 	if (lastHour != hourNow || retry == 1)
 	{

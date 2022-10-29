@@ -129,6 +129,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="inputMock.c" />
     <ClCompile Include="UpdateHourPrices.c" />
   </ItemGroup>
   <ItemGroup>

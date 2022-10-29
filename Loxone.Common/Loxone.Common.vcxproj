@@ -128,9 +128,20 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="loxone.c" />
+    <ClCompile Include="loxoneExtended.c" />
+    <ClCompile Include="loxoneHttp.c" />
+    <ClCompile Include="loxoneSps.c" />
+    <ClCompile Include="loxoneTime.c" />
+    <ClCompile Include="stringHelpers.c" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="inputMock.h" />
     <ClInclude Include="loxone.h" />
+    <ClInclude Include="loxoneExtended.h" />
+    <ClInclude Include="loxoneHttp.h" />
+    <ClInclude Include="loxoneSps.h" />
+    <ClInclude Include="loxoneTime.h" />
+    <ClInclude Include="stringHelpers.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

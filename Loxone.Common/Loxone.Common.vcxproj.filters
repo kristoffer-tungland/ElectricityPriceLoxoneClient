@@ -15,12 +15,45 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="loxoneExtended.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="loxone.c">
-      <Filter>Resource Files</Filter>
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="stringHelpers.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="loxoneHttp.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="loxoneTime.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="loxoneSps.c">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="loxone.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="loxoneExtended.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="stringHelpers.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="loxoneHttp.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="loxoneTime.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="loxoneSps.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="inputMock.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

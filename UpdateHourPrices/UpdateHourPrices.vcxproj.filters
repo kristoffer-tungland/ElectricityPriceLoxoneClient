@@ -18,5 +18,8 @@
     <ClCompile Include="UpdateHourPrices.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="inputMock.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
