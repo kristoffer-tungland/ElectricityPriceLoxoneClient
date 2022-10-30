@@ -12,38 +12,127 @@
 
 enum OutputPorts
 {
-	ScoreNow,        // AQ1
-	HourNow,            // AQ2
-	PriceNow             // AQ3
+	ScoreNow			= 0, // AQ1
+	PriceNow			= 1, // AQ2
+	AverageToday		= 2, // AQ3
+	AverageMonth		= 3, // AQ4
+	AverageLast31Days	= 4, // AQ5
 };
 
-float readvalue(char* result, char* name)
+enum Days {
+	Today,
+	Tomorrow
+};
+
+char* getRequest(char* endpoint)
 {
-	float value = -100;
+	char* host = "electricitypriceapi.azurewebsites.net";
 
-	int pos = strfind(result, name, 0);
+	char* result = httpget(host, endpoint);
 
-	printf("strfind: %d", pos);
-
-	if (pos > 0)
-	{
-		char* stemp = calloc(1, 10);
-		int lenName = strlen(name);
-		printf("lenName: %d", lenName);
-
-		strncpy(stemp, result + pos + lenName, 9);
-
-		printf("stemp: %s", stemp);
-
-		value = atof(stemp);
-
-		free(stemp);
-		stemp = 0;
+	if (result != 0) {
+		return result;
 	}
 
-	printf("%s = %f\r\n", name, value);
+	return 0;
+}
 
-	return value;
+char* getAveragePrices(char* area, char* currency)
+{
+	char endpoint[60];
+	sprintf(endpoint, "/api/AveragePrices?area=%s&currency=%s&format=xml", area, currency);
+	return getRequest(endpoint);
+}
+
+char* getTodaysPrice(char* area, char* currency)
+{
+	char endpoint[60];
+	sprintf(endpoint, "/api/PriceScoreToday?area=%s&currency=%s&format=xml", area, currency);
+	return getRequest(endpoint);
+}
+
+char* getTomorowsPrice(char* area, char* currency)
+{
+	char endpoint[60];
+	sprintf(endpoint, "/api/PriceScoreTomorrow?area=%s&currency=%s&format=xml", area, currency);
+	return getRequest(endpoint);
+}
+
+void setOutputFromXml(char* xml, char* name, int output) {
+	char* strvalue = getxmlvalue(xml, 0, name);
+	float value = -1;
+
+	if (strvalue != NULL) {
+		value = atof(strvalue);
+	}
+
+	free(strvalue);
+
+	setoutput(output, value);
+}
+
+void setVirtualOutputFromXml(char* xml, char* name, char* output) {
+	char* strvalue = getxmlvalue(xml, 0, name);
+	float value = -1;
+
+	if (strvalue != NULL) {
+		value = atof(strvalue);
+	}
+
+	free(strvalue);
+
+	setio(output, value);
+}
+
+void setVirtualOutputs(char* xml, char* prefix, int day) {
+	char* daystr;
+
+	if (day == Today) {
+		daystr = "Today";
+	}
+	else {
+		daystr = "Tomorrow";
+	}
+	
+	for (int i = 0; i < 24; i++) {
+		char name[20];
+		sprintf(name, "%s%d", prefix, i);
+
+		char outputName[30];
+		sprintf(outputName, "%s%d%s", prefix, i, daystr);
+
+		setVirtualOutputFromXml(xml, name, outputName);
+	}
+}
+
+void updateOutputs(char* prefix, int hourNow, char* xmlToday, char* xmlTomorrow, int output) {
+	char name[20];
+	sprintf(name, "%s%d", prefix, hourNow);
+	
+	setOutputFromXml(xmlToday, name, output);
+
+	setVirtualOutputs(xmlToday, prefix, Today);
+	setVirtualOutputs(xmlTomorrow, prefix, Tomorrow);
+}
+
+void updateAverage(char* xml) {
+	char averageToday[20] = "Today";
+	setOutputFromXml(xml, averageToday, AverageToday);
+
+	char averageTodayMonth[20] = "Month";
+	setOutputFromXml(xml, averageTodayMonth, AverageMonth);
+
+	char averageLast31days[20] = "Last31Days";
+	setOutputFromXml(xml, averageLast31days, AverageLast31Days);
+}
+
+void printOutPutInformation() {
+	setoutputtext(0, "\
+ScoreNow		= 0, // AQ1\r\n\
+PriceNow		= 1, // AQ2\r\n\
+AverageToday		= 2, // AQ3\r\n\
+AverageMonth		= 3, // AQ4\r\n\
+AverageLast31Days	= 4, // AQ5");
 }
 
 // Delete main
@@ -51,82 +140,102 @@ int main() {
 // Delete main
 
 int lastHour = -1;
-int retry = 0;
+
+printOutPutInformation();
+
+char* area = "no2";
+char* currency = "NOK";
+
+int todayRefreshed = 0;
+int averageRefreshed = 0;
+
+char* todaysPrice = getTodaysPrice(area, currency);
+if (todaysPrice != 0) {
+	todayRefreshed = 1;
+	setlogtext(todaysPrice);
+}
+char* averagePrices = getAveragePrices(area, currency);
+if (averagePrices != 0) {
+	averageRefreshed = 1;
+	setlogtext(averagePrices);
+}
 
 unsigned int time = getcurrenttime();
-int year = getyear(time, 1);
-int month = getmonth(time, 1);
-int day = getday(time, 1);
-int hour = gethour(time, 1);
-unsigned int customtime = gettimeval(2022, 10, 29, 13, 27, 0, 1);
+int hourNow = gethour(time, 1);
 
-char* response = httpget("https://electricitypriceapi.azurewebsites.net", "/api/AveragePrices?area=no2&currency=NOK&format=xml");
+char* tomorowsPrice = 0;
 
-char* average = getxmlvalue(response, 0, "Today");
+if (hourNow > 14) {
+	tomorowsPrice = getTomorowsPrice(area, currency);
 
-float input0 = getinput(0);
-
-printf("%f", input0);
-
-setlogtext(average);
-
-free(response);
-free(average);
+	if (tomorowsPrice != 0) {
+		setlogtext(tomorowsPrice);
+	}
+}
 
 while (TRUE)
 {
-	int hourNow = gethour(time, 1);
+	unsigned int time = getcurrenttime();
+	hourNow = gethour(time, 1);
 	int minuteNow = getminute(time, 1);
 
-	if (lastHour != hourNow || retry == 1)
+	if (hourNow > 23 && minuteNow > 58)
 	{
-		lastHour = hourNow;
-		retry = 0;
+		free(tomorowsPrice);
+		tomorowsPrice = 0;
+		todayRefreshed = 0;
+		averageRefreshed = 0;
+	}
 
-		char* scores = getinputtext(0);
-
-		printf("%s", scores);
-
-		setoutput(HourNow, hourNow);
-
-		char scoreOfHour[20];
-		sprintf(scoreOfHour, "\"ScoreOfHour%d\": ", hourNow);
-
-		float score = readvalue(scores, scoreOfHour);
-
-		free(scores);
-
-		if (score != -100)
-		{
-			setoutput(ScoreNow, score);
-		}
-		else
-		{
-			retry = 1;
-		}
-
-		char* prices = getinputtext(1);
-
-		char priceOfHour[20];
-		sprintf(priceOfHour, "\"PriceOfHour%d\": ", hourNow);
-
-		float price = readvalue(prices, priceOfHour);
-
-		free(prices);
-
-		if (price != -100)
-		{
-			setoutput(PriceNow, price);
-		}
-		else
-		{
-			retry = 1;
+	if (hourNow > 14 && tomorowsPrice == 0)
+	{
+		free(tomorowsPrice);
+		tomorowsPrice = getTomorowsPrice(area, currency);
+		if (tomorowsPrice != 0) {
+			setlogtext(tomorowsPrice);
 		}
 	}
 
-	// Slow the loop down 1 minutes
-	int sleepTime = 1 * 60 * 1000;
-	sleep(sleepTime);
+	if (hourNow == 23 && minuteNow > 30 && todayRefreshed == 0 && tomorowsPrice != 0)
+	{
+		free(todaysPrice);
+		todaysPrice = tomorowsPrice;
+		setlogtext(todaysPrice);
+		todayRefreshed = 1;
+	}
+
+	if (hourNow == 0 && todayRefreshed == 0)
+	{
+		free(todaysPrice);
+		todaysPrice = getTodaysPrice(area, currency);
+		if (todaysPrice != 0) {
+			setlogtext(todaysPrice);
+			todayRefreshed = 1;
+		}
+	}
+
+	if (hourNow == 23 && minuteNow > 30 && averageRefreshed == 0)
+	{
+		free(averagePrices);
+		averagePrices = getAveragePrices(area, currency);
+
+		if (averagePrices != 0) {
+			setlogtext(averagePrices);
+			averageRefreshed = 1;
+		}
+	}
+
+	if (lastHour != hourNow)
+	{
+		lastHour = hourNow;
+
+		updateOutputs("ScoreOfHour", hourNow, todaysPrice, tomorowsPrice, ScoreNow);
+		updateOutputs("PriceOfHour", hourNow, todaysPrice, tomorowsPrice, PriceNow);
+		updateAverage(averagePrices);
+	}
+
+	// Slow down for 1 second
+	sleeps(1);
 }
 
 // Delete main end

@@ -56,5 +56,67 @@ char* httpgetmock(char* adress, char* page) {
 </GetAveragePricesResult>";
 	}
 
+	else if (strstr(page, "PriceScore") != NULL) {
+		return "\
+<GetScoreResult xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\">\r\n\
+    <ScoreNow>10</ScoreNow>\r\n\
+    <HourNow>12</HourNow>\r\n\
+    <PriceNow>1.02695</PriceNow>\r\n\
+    <PriceUnit>NOK/kWh</PriceUnit>\r\n\
+    <HourScores>\r\n\
+        <ScoreOfHour0>9</ScoreOfHour0>\r\n\
+        <ScoreOfHour1>7</ScoreOfHour1>\r\n\
+        <ScoreOfHour2>4</ScoreOfHour2>\r\n\
+        <ScoreOfHour3>1</ScoreOfHour3>\r\n\
+        <ScoreOfHour4>2</ScoreOfHour4>\r\n\
+        <ScoreOfHour5>3</ScoreOfHour5>\r\n\
+        <ScoreOfHour6>6</ScoreOfHour6>\r\n\
+        <ScoreOfHour7>15</ScoreOfHour7>\r\n\
+        <ScoreOfHour8>17</ScoreOfHour8>\r\n\
+        <ScoreOfHour9>12</ScoreOfHour9>\r\n\
+        <ScoreOfHour10>8</ScoreOfHour10>\r\n\
+        <ScoreOfHour11>11</ScoreOfHour11>\r\n\
+        <ScoreOfHour12>10</ScoreOfHour12>\r\n\
+        <ScoreOfHour13>13</ScoreOfHour13>\r\n\
+        <ScoreOfHour14>16</ScoreOfHour14>\r\n\
+        <ScoreOfHour15>18</ScoreOfHour15>\r\n\
+        <ScoreOfHour16>21</ScoreOfHour16>\r\n\
+        <ScoreOfHour17>23</ScoreOfHour17>\r\n\
+        <ScoreOfHour18>25</ScoreOfHour18>\r\n\
+        <ScoreOfHour19>24</ScoreOfHour19>\r\n\
+        <ScoreOfHour20>22</ScoreOfHour20>\r\n\
+        <ScoreOfHour21>20</ScoreOfHour21>\r\n\
+        <ScoreOfHour22>19</ScoreOfHour22>\r\n\
+        <ScoreOfHour23>14</ScoreOfHour23>\r\n\
+    </HourScores>\r\n\
+    <HourPrices>\r\n\
+        <PriceOfHour0>1.0268472</PriceOfHour0>\r\n\
+        <PriceOfHour1>1.0053841</PriceOfHour1>\r\n\
+        <PriceOfHour2>1.0027139</PriceOfHour2>\r\n\
+        <PriceOfHour3>0.9803264</PriceOfHour3>\r\n\
+        <PriceOfHour4>0.9817642</PriceOfHour4>\r\n\
+        <PriceOfHour5>0.98700166</PriceOfHour5>\r\n\
+        <PriceOfHour6>1.0048705</PriceOfHour6>\r\n\
+        <PriceOfHour7>1.0950367</PriceOfHour7>\r\n\
+        <PriceOfHour8>1.1277965</PriceOfHour8>\r\n\
+        <PriceOfHour9>1.0484132</PriceOfHour9>\r\n\
+        <PriceOfHour10>1.025923</PriceOfHour10>\r\n\
+        <PriceOfHour11>1.027258</PriceOfHour11>\r\n\
+        <PriceOfHour12>1.02695</PriceOfHour12>\r\n\
+        <PriceOfHour13>1.0539588</PriceOfHour13>\r\n\
+        <PriceOfHour14>1.0967827</PriceOfHour14>\r\n\
+        <PriceOfHour15>1.2489766</PriceOfHour15>\r\n\
+        <PriceOfHour16>1.3920307</PriceOfHour16>\r\n\
+        <PriceOfHour17>1.5523376</PriceOfHour17>\r\n\
+        <PriceOfHour18>1.6937485</PriceOfHour18>\r\n\
+        <PriceOfHour19>1.6402445</PriceOfHour19>\r\n\
+        <PriceOfHour20>1.4664845</PriceOfHour20>\r\n\
+        <PriceOfHour21>1.3827881</PriceOfHour21>\r\n\
+        <PriceOfHour22>1.2637646</PriceOfHour22>\r\n\
+        <PriceOfHour23>1.087232</PriceOfHour23>\r\n\
+    </HourPrices>\r\n\
+</GetScoreResult>";
+	}
+
 	return NULL;
 }

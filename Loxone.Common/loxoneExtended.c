@@ -91,8 +91,8 @@ char* getxmlvalue(char* str, int index, char* name)
 		if (lenTagVal)
 		{
 			char* result;
-			result = (char*)malloc(lenTagVal);
-			strlcpy(result, pStartPosTagVal, lenTagVal);
+			result = (char*)malloc(lenTagVal + 1);
+			strlcpy(result, pStartPosTagVal, lenTagVal + 1 );
 
 			return result;
 		}

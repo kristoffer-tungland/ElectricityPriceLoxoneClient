@@ -8,7 +8,7 @@
 
 void setlogtext(char* str)
 {
-	printf("Log text: %s\n", str);
+	printf("Log text:\r\n%s\r\n\r\n", str);
 }
 
 float getio(char* str)
@@ -51,5 +51,5 @@ void setoutput(int output, float value)
 
 void setoutputtext(int output, char* str)
 {
-	printf("Text output %d: %s\r\n", output, str);
+	printf("Text output %d:\r\n%s\r\n\r\n", output, str);
 }
