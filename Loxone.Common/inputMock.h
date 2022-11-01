@@ -1,5 +1,7 @@
 #pragma once
 
+unsigned int getcurrenttimemock();
+
 float getiomock(char* str);
 
 int getinputeventmock();

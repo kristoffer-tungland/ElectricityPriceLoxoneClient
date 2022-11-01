@@ -15,9 +15,28 @@ enum OutputPorts
 	ScoreNow			= 0, // AQ1
 	PriceNow			= 1, // AQ2
 	AverageToday		= 2, // AQ3
-	AverageMonth		= 3, // AQ4
-	AverageLast31Days	= 4, // AQ5
+	AverageWeek			= 3, // AQ4
+	AverageMonth		= 4, // AQ5
+	AverageLast7Days	= 5, // AQ6
+	AverageLast31Days	= 6, // AQ7
 };
+
+void printOutPutInformation() {
+	setoutputtext(0, "\
+OUTPUTS:\r\n\
+Score now			AQ1\r\n\
+Price now			AQ2\r\n\
+Average today			AQ3\r\n\
+Average this week		AQ4\r\n\
+Average this month		AQ5\r\n\
+Average last 7 days		AQ6\r\n\
+Average last 31 days		AQ7\r\n\
+\r\n\
+VIRTUAL OUTPUTS:\r\n\
+ScoreOfHour[NN]Today\r\n\
+ScoreOfHour[NN]Tomorrow\r\n\
+");
+}
 
 enum Days {
 	Today,
@@ -58,29 +77,31 @@ char* getTomorowsPrice(char* area, char* currency)
 	return getRequest(endpoint);
 }
 
-void setOutputFromXml(char* xml, char* name, int output) {
-	char* strvalue = getxmlvalue(xml, 0, name);
+float getValueFromXml(char* xml, char* name) {
 	float value = -1;
+
+	if (xml == NULL) {
+		return value;
+	}
+
+	char* strvalue = getxmlvalue(xml, 0, name);
 
 	if (strvalue != NULL) {
 		value = atof(strvalue);
+		free(strvalue);
+		strvalue = NULL;
 	}
 
-	free(strvalue);
+	return value;
+}
 
+void setOutputFromXml(char* xml, char* name, int output) {
+	float value = getValueFromXml(xml, name);
 	setoutput(output, value);
 }
 
 void setVirtualOutputFromXml(char* xml, char* name, char* output) {
-	char* strvalue = getxmlvalue(xml, 0, name);
-	float value = -1;
-
-	if (strvalue != NULL) {
-		value = atof(strvalue);
-	}
-
-	free(strvalue);
-
+	float value = getValueFromXml(xml, name);
 	setio(output, value);
 }
 
@@ -110,7 +131,6 @@ void updateOutputs(char* prefix, int hourNow, char* xmlToday, char* xmlTomorrow,
 	sprintf(name, "%s%d", prefix, hourNow);
 	
 	setOutputFromXml(xmlToday, name, output);
-
 	setVirtualOutputs(xmlToday, prefix, Today);
 	setVirtualOutputs(xmlTomorrow, prefix, Tomorrow);
 }
@@ -119,20 +139,17 @@ void updateAverage(char* xml) {
 	char averageToday[20] = "Today";
 	setOutputFromXml(xml, averageToday, AverageToday);
 
+	char averageWeekMonth[20] = "Week";
+	setOutputFromXml(xml, averageWeekMonth, AverageWeek);
+
 	char averageTodayMonth[20] = "Month";
 	setOutputFromXml(xml, averageTodayMonth, AverageMonth);
 
+	char averageLast7days[20] = "Last7Days";
+	setOutputFromXml(xml, averageLast7days, AverageLast7Days);
+
 	char averageLast31days[20] = "Last31Days";
 	setOutputFromXml(xml, averageLast31days, AverageLast31Days);
-}
-
-void printOutPutInformation() {
-	setoutputtext(0, "\
-ScoreNow		= 0, // AQ1\r\n\
-PriceNow		= 1, // AQ2\r\n\
-AverageToday		= 2, // AQ3\r\n\
-AverageMonth		= 3, // AQ4\r\n\
-AverageLast31Days	= 4, // AQ5");
 }
 
 // Delete main
@@ -146,8 +163,9 @@ printOutPutInformation();
 char* area = "no2";
 char* currency = "NOK";
 
-int todayRefreshed = 0;
-int averageRefreshed = 0;
+int todayRefreshed = FALSE;
+int todayCopied = FALSE;
+int averageRefreshed = FALSE;
 
 char* todaysPrice = getTodaysPrice(area, currency);
 if (todaysPrice != 0) {
@@ -179,49 +197,61 @@ while (TRUE)
 	hourNow = gethour(time, 1);
 	int minuteNow = getminute(time, 1);
 
-	if (hourNow > 23 && minuteNow > 58)
+	if (hourNow == 23 && minuteNow > 58)
 	{
 		free(tomorowsPrice);
-		tomorowsPrice = 0;
-		todayRefreshed = 0;
-		averageRefreshed = 0;
+		tomorowsPrice = NULL;
+
+
+		if (todayCopied == TRUE) {
+			todayRefreshed == TRUE;
+		}
+		else {
+			todayRefreshed = FALSE;
+		}
+		todayCopied = FALSE;
+
+		averageRefreshed = FALSE;
 	}
 
-	if (hourNow > 14 && tomorowsPrice == 0)
+	if (hourNow >= 14 && hourNow < 23 && tomorowsPrice == NULL)
 	{
 		free(tomorowsPrice);
 		tomorowsPrice = getTomorowsPrice(area, currency);
-		if (tomorowsPrice != 0) {
+		if (tomorowsPrice != NULL) {
 			setlogtext(tomorowsPrice);
 		}
 	}
 
-	if (hourNow == 23 && minuteNow > 30 && todayRefreshed == 0 && tomorowsPrice != 0)
+	if (hourNow == 23 && minuteNow > 30 && tomorowsPrice != NULL)
 	{
 		free(todaysPrice);
-		todaysPrice = tomorowsPrice;
-		setlogtext(todaysPrice);
-		todayRefreshed = 1;
-	}
-
-	if (hourNow == 0 && todayRefreshed == 0)
-	{
-		free(todaysPrice);
-		todaysPrice = getTodaysPrice(area, currency);
-		if (todaysPrice != 0) {
+		todaysPrice = malloc(strlen(tomorowsPrice) + 1);
+		if (todaysPrice != NULL) {
+			strcpy(todaysPrice, tomorowsPrice);
 			setlogtext(todaysPrice);
-			todayRefreshed = 1;
+			todayCopied = TRUE;
 		}
 	}
 
-	if (hourNow == 23 && minuteNow > 30 && averageRefreshed == 0)
+	if (hourNow == 0 && todayRefreshed == FALSE)
+	{
+		free(todaysPrice);
+		todaysPrice = getTodaysPrice(area, currency);
+		if (todaysPrice != NULL) {
+			setlogtext(todaysPrice);
+			todayRefreshed = TRUE;
+		}
+	}
+
+	if (hourNow == 0 && averageRefreshed == FALSE)
 	{
 		free(averagePrices);
 		averagePrices = getAveragePrices(area, currency);
 
-		if (averagePrices != 0) {
+		if (averagePrices != NULL) {
 			setlogtext(averagePrices);
-			averageRefreshed = 1;
+			averageRefreshed = TRUE;
 		}
 	}
 
