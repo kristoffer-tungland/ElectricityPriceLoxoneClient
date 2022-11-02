@@ -272,7 +272,7 @@ while (TRUE)
 			factor = 1;
 		}
 
-		updateOutputs("ScoreOfHour", hourNow, todaysPrice, tomorowsPrice, ScoreNow, factor);
+		updateOutputs("ScoreOfHour", hourNow, todaysPrice, tomorowsPrice, ScoreNow, 1);
 		updateOutputs("PriceOfHour", hourNow, todaysPrice, tomorowsPrice, PriceNow, factor);
 		updateAverage(averagePrices, factor);
 	}

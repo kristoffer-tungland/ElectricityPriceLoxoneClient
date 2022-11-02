@@ -23,7 +23,7 @@ content = content.Replace("// Delete main\r\nint main() {\r\n// Delete main\r\n"
 content = content.Replace("// Delete main end\r\n}\r\n// Delete main end", "", StringComparison.Ordinal);
 content = content.Trim('\r', '\n');
 
-var outputPath = Path.Combine(Path.GetDirectoryName(filePath), Path.GetFileNameWithoutExtension(filePath) + ".picoc");
+var outputPath = Path.Combine(Path.GetDirectoryName(filePath) ?? throw new InvalidOperationException(), Path.GetFileNameWithoutExtension(filePath) + ".picoc");
 
 File.WriteAllText(outputPath, content);
 
