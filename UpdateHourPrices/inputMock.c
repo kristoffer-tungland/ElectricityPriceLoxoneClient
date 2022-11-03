@@ -6,10 +6,21 @@
 #include <wtypes.h>
 
 int timeState = 0;
+time_t seconds = NULL;
 
 unsigned int getcurrenttimemock()
 {
-	unsigned int time;
+    if (seconds == NULL) {
+        seconds = time(NULL);
+    }
+    else {
+        seconds = seconds + 60;
+    }
+
+    return seconds;
+
+
+	/*unsigned int time;
 
 	switch (timeState) {
 	case 0: time = gettimeval(2022, 10, 31, 12, 31, 0, 1); break;
@@ -28,7 +39,7 @@ unsigned int getcurrenttimemock()
 
 	timeState++;
 
-	return time;
+	return time;*/
 }
 
 float getiomock(char* str)

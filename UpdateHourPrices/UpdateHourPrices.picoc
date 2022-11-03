@@ -92,13 +92,18 @@ float getValueFromXml(char* xml, char* name) {
 
 void setOutputFromXml(char* xml, char* name, int output, float factor) {
 	float value = getValueFromXml(xml, name);
-	value = value * factor;
+	if (value > 0) {
+		value = value * factor;
+	}
+	
 	setoutput(output, value);
 }
 
 void setVirtualOutputFromXml(char* xml, char* name, char* output, float factor) {
 	float value = getValueFromXml(xml, name);
-	value = value * factor;
+	if (value > 0) {
+		value = value * factor;
+	}
 	setio(output, value);
 }
 
@@ -216,7 +221,7 @@ while (TRUE)
 		}
 	}
 
-	if (hourNow == 23 && minuteNow > 30 && tomorowsPrice != NULL)
+	if (hourNow == 23 && minuteNow > 30 && tomorowsPrice != NULL && todayCopied == FALSE)
 	{
 		free(todaysPrice);
 		todaysPrice = malloc(strlen(tomorowsPrice) + 1);
@@ -237,7 +242,7 @@ while (TRUE)
 		}
 	}
 
-	if (hourNow == 0 && averageRefreshed == FALSE)
+	if (hourNow == 0 && minuteNow > 1 && averageRefreshed == FALSE)
 	{
 		free(averagePrices);
 		averagePrices = getAveragePrices(area, currency);
