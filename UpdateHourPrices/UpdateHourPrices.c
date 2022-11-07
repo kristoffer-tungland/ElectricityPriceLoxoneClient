@@ -176,17 +176,14 @@ char* area = "no2";
 char* currency = "NOK";
 
 int todayRefreshed = FALSE;
-int todayCopied = FALSE;
 int averageRefreshed = FALSE;
 
 char* todaysPrice = getTodaysPrice(area, currency);
 if (todaysPrice != 0) {
-	todayRefreshed = 1;
 	setlogtext(todaysPrice);
 }
 char* averagePrices = getAveragePrices(area, currency);
 if (averagePrices != 0) {
-	averageRefreshed = 1;
 	setlogtext(averagePrices);
 }
 
@@ -213,16 +210,7 @@ while (TRUE)
 	{
 		free(tomorowsPrice);
 		tomorowsPrice = NULL;
-
-
-		if (todayCopied == TRUE) {
-			todayRefreshed = TRUE;
-		}
-		else {
-			todayRefreshed = FALSE;
-		}
-		todayCopied = FALSE;
-
+		todayRefreshed = FALSE;
 		averageRefreshed = FALSE;
 	}
 
@@ -235,28 +223,25 @@ while (TRUE)
 		}
 	}
 
-	if (hourNow == 23 && minuteNow > 30 && tomorowsPrice != NULL && todayCopied == FALSE)
+	if (hourNow >= 23 && minuteNow > 30 && minuteNow < 58 && todayRefreshed == FALSE)
 	{
 		free(todaysPrice);
-		todaysPrice = malloc(strlen(tomorowsPrice) + 1);
-		if (todaysPrice != NULL) {
-			strcpy(todaysPrice, tomorowsPrice);
-			setlogtext(todaysPrice);
-			todayCopied = TRUE;
-		}
-	}
-
-	if (hourNow == 0 && todayRefreshed == FALSE)
-	{
-		free(todaysPrice);
-		todaysPrice = getTodaysPrice(area, currency);
+		todaysPrice = getTomorowsPrice(area, currency);
 		if (todaysPrice != NULL) {
 			setlogtext(todaysPrice);
 			todayRefreshed = TRUE;
 		}
+		else if (tomorowsPrice != NULL) {
+			todaysPrice = malloc(strlen(tomorowsPrice) + 1);
+			if (todaysPrice != NULL) {
+				strcpy(todaysPrice, tomorowsPrice);
+				setlogtext(todaysPrice);
+				todayRefreshed = TRUE;
+			}
+		}
 	}
 
-	if (hourNow == 0 && minuteNow > 1 && averageRefreshed == FALSE)
+	if (hourNow >= 23 && minuteNow > 30 && minuteNow < 58 && averageRefreshed == FALSE)
 	{
 		free(averagePrices);
 		averagePrices = getAveragePrices(area, currency);
