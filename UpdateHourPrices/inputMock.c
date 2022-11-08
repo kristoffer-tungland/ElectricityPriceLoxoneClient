@@ -18,28 +18,6 @@ unsigned int getcurrenttimemock()
     }
 
     return seconds;
-
-
-	/*unsigned int time;
-
-	switch (timeState) {
-	case 0: time = gettimeval(2022, 10, 31, 12, 31, 0, 1); break;
-	case 1: time = gettimeval(2022, 10, 31, 14, 15, 0, 1); break;
-	case 2: time = gettimeval(2022, 10, 31, 14, 35, 0, 1); break;
-	case 3: time = gettimeval(2022, 10, 31, 17, 45, 0, 1); break;
-	case 4: time = gettimeval(2022, 10, 31, 23, 15, 0, 1); break;
-	case 5: time = gettimeval(2022, 10, 31, 23, 35, 0, 1); break;
-	case 6: time = gettimeval(2022, 10, 31, 23, 59, 0, 1); break;
-	case 7: time = gettimeval(2022, 11, 1, 0, 15, 0, 1); break;
-	case 8: time = gettimeval(2022, 11, 1, 0, 30, 0, 1); break;
-	case 9: time = gettimeval(2022, 11, 1, 14, 15, 0, 1); break;
-	case 10: time = gettimeval(2022, 11, 1, 14, 30, 0, 1); break;
-	default: time = gettimeval(2022, 11, 1, 17, 11, 0, 1); break;
-	}
-
-	timeState++;
-
-	return time;*/
 }
 
 float getiomock(char* str)

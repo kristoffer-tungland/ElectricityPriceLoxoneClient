@@ -41,7 +41,10 @@ VIRTUAL OUTPUTS:\r\n\
 ScoreOfHour[NN]Today\r\n\
 PriceOfHour[NN]Tomorrow\r\n\
 ScoreOfHour[NN]Today\r\n\
-PriceOfHour[NN]Tomorrow\r\n");
+PriceOfHour[NN]Tomorrow\r\n\
+PriceOfHour[NN]Tomorrow\r\n\
+ScoreIn[NN]Hours\r\n\
+PriceIn[NN]Hours\r\n");
 }
 
 enum Days {
@@ -118,6 +121,17 @@ void setVirtualOutputFromXml(char* xml, char* name, char* output, float factor) 
 	setio(output, value);
 }
 
+char* generateXmlName(char* prefix, int hour) {
+	char* name;
+	name = malloc(20);
+
+	if (name != NULL) {
+		sprintf(name, "%sOfHour%d", prefix, hour);
+	}
+
+	return name;
+}
+
 void setVirtualOutputs(char* xml, char* prefix, int day, float factor) {
 	char* daystr;
 
@@ -129,23 +143,50 @@ void setVirtualOutputs(char* xml, char* prefix, int day, float factor) {
 	}
 	
 	for (int i = 0; i < 24; i++) {
-		char name[20];
-		sprintf(name, "%s%d", prefix, i);
+		char* name = generateXmlName(prefix, i);
 
 		char outputName[30];
-		sprintf(outputName, "%s%d%s", prefix, i, daystr);
+		sprintf(outputName, "%sOfHour%d%s", prefix, i, daystr);
 
 		setVirtualOutputFromXml(xml, name, outputName, factor);
+		free(name);
 	}
 }
 
 void updateOutputs(char* prefix, int hourNow, char* xmlToday, char* xmlTomorrow, int output, float factor) {
-	char name[20];
-	sprintf(name, "%s%d", prefix, hourNow);
+	char* name = generateXmlName(prefix, hourNow);
 	
 	setOutputFromXml(xmlToday, name, output, factor);
+	free(name);
 	setVirtualOutputs(xmlToday, prefix, Today, factor);
 	setVirtualOutputs(xmlTomorrow, prefix, Tomorrow, factor);
+}
+
+
+void updateAhedPrices(char* prefix, int hourNow, char* xmlToday, char* xmlTomorrow, float factor) {
+	for (int i = 1; i < 13; i++) {
+		int hour = i + hourNow;
+		int tomorrow = FALSE;
+
+		if (hour > 23) {
+			hour = hour - 24;
+			tomorrow = TRUE;
+		}
+
+		char* name = generateXmlName(prefix, hour);
+
+		char outputName[30];
+		sprintf(outputName, "%sIn%dHours", prefix, i);
+
+		if (tomorrow == TRUE) {
+			setVirtualOutputFromXml(xmlTomorrow, name, outputName, factor);
+		}
+		else {
+			setVirtualOutputFromXml(xmlToday, name, outputName, factor);
+		}
+
+		free(name);
+	}
 }
 
 void updateAverage(char* xml, float factor) {
@@ -262,9 +303,11 @@ while (TRUE)
 			factor = 1;
 		}
 
-		updateOutputs("ScoreOfHour", hourNow, todaysPrice, tomorowsPrice, ScoreNow, 1);
-		updateOutputs("PriceOfHour", hourNow, todaysPrice, tomorowsPrice, PriceNow, factor);
+		updateOutputs("Score", hourNow, todaysPrice, tomorowsPrice, ScoreNow, 1);
+		updateOutputs("Price", hourNow, todaysPrice, tomorowsPrice, PriceNow, factor);
 		updateAverage(averagePrices, factor);
+		updateAhedPrices("Score", hourNow, todaysPrice, tomorowsPrice, 1);
+		updateAhedPrices("Price", hourNow, todaysPrice, tomorowsPrice, factor);
 	}
 
 	// Slow down for 1 second
