@@ -324,8 +324,9 @@ while (TRUE)
 	}
 
 	// Slow down for 1 second
-	//sleeps(1);
+	sleeps(1);
 }
+
 ```
 
 ## Electricity Price API
