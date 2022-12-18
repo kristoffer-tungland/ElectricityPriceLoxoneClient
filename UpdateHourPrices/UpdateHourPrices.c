@@ -205,6 +205,29 @@ void updateAverage(char* xml, float factor) {
 	char averageLast31days[20] = "Last31Days";
 	setOutputFromXml(xml, averageLast31days, AverageLast31Days, factor);
 }
+
+int update(int lastHour, int hourNow, char* todaysPrice, char* tomorowsPrice, char* averagePrices)
+{
+	if (lastHour != hourNow)
+	{
+		float factor = getinput(PriceFactor);
+
+		if (factor == 0) {
+			factor = 1;
+		}
+
+		updateOutputs("Score", hourNow, todaysPrice, tomorowsPrice, ScoreNow, 1);
+		updateOutputs("Price", hourNow, todaysPrice, tomorowsPrice, PriceNow, factor);
+		updateAverage(averagePrices, factor);
+		updateAhedPrices("Score", hourNow, todaysPrice, tomorowsPrice, 1);
+		updateAhedPrices("Price", hourNow, todaysPrice, tomorowsPrice, factor);
+
+		return TRUE;
+	}
+
+	return FALSE;
+}
+
 // Delete main
 int main() {
 // Delete main
@@ -239,6 +262,11 @@ if (hourNow > 14) {
 	if (tomorowsPrice != 0) {
 		setlogtext(tomorowsPrice);
 	}
+}
+
+if (update(lastHour, hourNow, todaysPrice, tomorowsPrice, averagePrices) == TRUE)
+{
+	lastHour = hourNow;
 }
 
 while (TRUE)
@@ -293,25 +321,13 @@ while (TRUE)
 		}
 	}
 
-	if (lastHour != hourNow)
+	if (update(lastHour, hourNow, todaysPrice, tomorowsPrice, averagePrices) == TRUE)
 	{
 		lastHour = hourNow;
-
-		float factor = getinput(PriceFactor);
-
-		if (factor == 0) {
-			factor = 1;
-		}
-
-		updateOutputs("Score", hourNow, todaysPrice, tomorowsPrice, ScoreNow, 1);
-		updateOutputs("Price", hourNow, todaysPrice, tomorowsPrice, PriceNow, factor);
-		updateAverage(averagePrices, factor);
-		updateAhedPrices("Score", hourNow, todaysPrice, tomorowsPrice, 1);
-		updateAhedPrices("Price", hourNow, todaysPrice, tomorowsPrice, factor);
 	}
 
 	// Slow down for 1 second
-	sleeps(1);
+	//sleeps(1);
 }
 
 // Delete main end
