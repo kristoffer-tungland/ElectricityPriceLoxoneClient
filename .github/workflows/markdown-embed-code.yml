@@ -16,3 +16,6 @@ jobs:
           node-version: 14
       - run: npm install -g embedme
       - run: embedme README.md
+      - uses: EndBug/add-and-commit@v9
+        with:
+          add: "README.md"
