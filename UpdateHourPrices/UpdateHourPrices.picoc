@@ -1,14 +1,3 @@
-#include "../Loxone.Common/loxone.h"
-#include "../Loxone.Common/loxoneExtended.h"
-#include "../Loxone.Common/loxoneHttp.h"
-#include "../Loxone.Common/loxoneTime.h"
-#include "../Loxone.Common/loxoneSps.h"
-
-#include <wtypes.h>
-#include <stdio.h>
-#include <string.h>
-
-// Copy script from here
 enum InputPorts {
 	PriceFactor = 0 // I1
 };
@@ -228,9 +217,6 @@ int update(int lastHour, int hourNow, char* todaysPrice, char* tomorowsPrice, ch
 	return FALSE;
 }
 
-// Delete main
-int main() {
-// Delete main
 
 int lastHour = -1;
 
@@ -327,9 +313,5 @@ while (TRUE)
 	}
 
 	// Slow down for 1 second
-	sleeps(1);
+	//sleeps(1);
 }
-
-// Delete main end
-}
-// Delete main end

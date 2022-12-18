@@ -1,5 +1,6 @@
 #include "pch.h"
 #include "CppUnitTest.h"
+#include "../Loxone.Common/loxoneExtended.h"
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
@@ -9,23 +10,10 @@ namespace ElectricityPriceLoxoneClientTests
 	{
 	public:
 		
-		TEST_METHOD(TestMethod1)
+		TEST_METHOD(batoitest)
 		{
-           std::string first = first_numberstring("\"ScoreNow\": 22,\r\n");
-            std::string name = "22";
-            Assert::AreEqual(first, name);
+			int value = batoi(" 21");
+            Assert::AreEqual(21, value);
 		}
-
-        std::string first_numberstring(std::string const& str)
-        {
-            char const* digits = "0123456789";
-            std::size_t const n = str.find_first_of(digits);
-            if (n != std::string::npos)
-            {
-                std::size_t const m = str.find_first_not_of(digits, n);
-                return str.substr(n, m != std::string::npos ? m - n : m);
-            }
-            return std::string();
-        }
 	};
 }

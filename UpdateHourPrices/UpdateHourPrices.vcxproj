@@ -82,6 +82,9 @@
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
+    <PreBuildEvent>
+      <Command>"$(SolutionDir)\BuildPicoC\bin\Debug\net6.0\BuildPicoC.exe" "$(SolutionDir)UpdateHourPrices\UpdateHourPrices.c"</Command>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -99,6 +102,9 @@
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
+    <PreBuildEvent>
+      <Command>"$(SolutionDir)\BuildPicoC\bin\Debug\net6.0\BuildPicoC.exe" "$(SolutionDir)UpdateHourPrices\UpdateHourPrices.c"</Command>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -129,12 +135,16 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="inputMock.c" />
     <ClCompile Include="UpdateHourPrices.c" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Loxone.Common\Loxone.Common.vcxproj">
       <Project>{91729c52-fbd4-4f5e-a84e-2867cf8e3221}</Project>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="UpdateHourPrices.picoc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
