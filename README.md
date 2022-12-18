@@ -5,8 +5,8 @@ It reads electrical prices from an API and outputs the prices at
 
 ## Script
 
-```c:UpdateHourPrices/UpdateHourPrices.picoc
-
+```c
+// UpdateHourPrices/UpdateHourPrices.picoc
 ```
 
 ## Electricity Price API
