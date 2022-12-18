@@ -6,8 +6,8 @@ optional virtual outputs.
 
 ## Script
 
-```c:UpdateHourPrices/UpdateHourPrices.picoc
-
+```c
+// UpdateHourPrices/UpdateHourPrices.picoc
 ```
 
 ## Electricity Price API
