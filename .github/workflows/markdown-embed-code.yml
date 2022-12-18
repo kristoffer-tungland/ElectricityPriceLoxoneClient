@@ -6,14 +6,16 @@ on:
       - master
 
 jobs:
-  embed-example:
+  embed_code:
+    name: Embed Code
     runs-on: ubuntu-latest
     steps:
-      - name: "Checkout current repo"
-        uses: actions/checkout@v3
-      - name: "Run entrypoint script."
-        uses: urmzd/embed-md@v1.0.0
-        id: "embed-code"
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v3
+        with: 
+          node-version: 14
+      - run: npm install -g embedme
+      - run: embedme README.md
+      - uses: EndBug/add-and-commit@v9
         with:
-          markdown-files: "README.md"
-          commit-message: "chore: embed example using self"
+          add: "README.md"
