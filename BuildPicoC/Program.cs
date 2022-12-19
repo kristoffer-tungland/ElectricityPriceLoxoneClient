@@ -1,5 +1,7 @@
 ﻿var filePath = args.FirstOrDefault();
 
+Console.WriteLine($" *** Build Pico C using file {filePath} *** ");
+
 filePath = filePath?.Trim('"');
 
 if (!File.Exists(filePath))

@@ -83,7 +83,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <PreBuildEvent>
-      <Command>"$(SolutionDir)\BuildPicoC\bin\Debug\net6.0\BuildPicoC.exe" "$(SolutionDir)UpdateHourPrices\UpdateHourPrices.c"</Command>
+      <Command>"$(ProjectDir)..\BuildPicoC\bin\$(Configuration)\net6.0\BuildPicoC.exe" "$(ProjectDir)UpdateHourPrices.c"</Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -103,7 +103,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <PreBuildEvent>
-      <Command>"$(SolutionDir)\BuildPicoC\bin\Debug\net6.0\BuildPicoC.exe" "$(SolutionDir)UpdateHourPrices\UpdateHourPrices.c"</Command>
+      <Command>"$(ProjectDir)..\BuildPicoC\bin\$(Configuration)\net6.0\BuildPicoC.exe" "$(ProjectDir)UpdateHourPrices.c"</Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">

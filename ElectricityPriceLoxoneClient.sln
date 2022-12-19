@@ -12,7 +12,12 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "UpdateHourPrices", "UpdateH
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Loxone.Common", "Loxone.Common\Loxone.Common.vcxproj", "{91729C52-FBD4-4F5E-A84E-2867CF8E3221}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BuildPicoC", "BuildPicoC\BuildPicoC.csproj", "{ECB18EE0-3FD4-488B-97FA-08AF00B059FF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BuildPicoC", "BuildPicoC\BuildPicoC.csproj", "{ECB18EE0-3FD4-488B-97FA-08AF00B059FF}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{2358A43E-0CEE-442E-81EA-67B1863C75F7}"
+	ProjectSection(SolutionItems) = preProject
+		.github\workflows\markdown-embed-code.yml = .github\workflows\markdown-embed-code.yml
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

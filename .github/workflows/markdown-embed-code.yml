@@ -8,7 +8,12 @@ on:
 jobs:
   embed_code:
     name: Embed Code
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
+    
+    strategy:
+      matrix:
+        dotnet-version: ['6.0.x']
+    
     steps:
       - name: Checkout repo
         uses: actions/checkout@v3
@@ -16,6 +21,21 @@ jobs:
           repository: ${{ github.event.pull_request.head.repo.full_name }}
           ref: ${{ github.event.pull_request.head.ref }}
         
+      - name: Setup .NET Core SDK ${{ matrix.dotnet-version }}
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: ${{ matrix.dotnet-version }}
+      - name: Install dependencies
+        run: dotnet restore
+      - name: Build
+        run: dotnet build .\BuildPicoC\BuildPicoC.csproj --configuration Release --no-restore
+        
+      - name: Add msbuild to PATH
+        uses: microsoft/setup-msbuild@v1.1
+
+      - name: Build Update Hour Prices release
+        run: msbuild .\UpdateHourPrices\UpdateHourPrices.vcxproj -t:rebuild -verbosity:diag -property:Configuration=Release
+
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with: 
