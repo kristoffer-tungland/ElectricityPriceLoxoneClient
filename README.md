@@ -26,7 +26,7 @@ enum OutputPorts {
 void printOutPutInformation() {
 	setoutputtext(0, "\
 INPUTS:\r\n\
-I1 - Price factor\r\n\
+I1 - Price factor (optional) default=1\r\n\
 OUTPUTS:\r\n\
 O1 - Score now\r\n\
 O2 - Price now\r\n\
@@ -326,7 +326,6 @@ while (TRUE)
 	// Slow down for 1 second
 	sleeps(1);
 }
-
 ```
 
 ## Electricity Price API
