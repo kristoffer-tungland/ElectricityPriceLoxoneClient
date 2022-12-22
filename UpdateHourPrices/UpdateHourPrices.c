@@ -28,7 +28,7 @@ void printOutPutInformation() {
 INPUTS:\r\n\
 I1 - Price factor (optional) default=1\r\n\
 OUTPUTS:\r\n\
-O1 - Score now\r\n\
+O1 - Score now (between 1-24)\r\n\
 O2 - Price now\r\n\
 O3 - Average today\r\n\
 O4 - Average this week\r\n\
