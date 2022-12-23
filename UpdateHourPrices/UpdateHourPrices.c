@@ -28,7 +28,7 @@ void printOutPutInformation() {
 INPUTS:\r\n\
 I1 - Price factor (optional) default=1\r\n\
 OUTPUTS:\r\n\
-O1 - Score now\r\n\
+O1 - Score now (between 1-24)\r\n\
 O2 - Price now\r\n\
 O3 - Average today\r\n\
 O4 - Average this week\r\n\
@@ -123,7 +123,7 @@ void setVirtualOutputFromXml(char* xml, char* name, char* output, float factor) 
 
 char* generateXmlName(char* prefix, int hour) {
 	char* name;
-	name = malloc(20);
+	name = (char*)malloc(20);
 
 	if (name != NULL) {
 		sprintf(name, "%sOfHour%d", prefix, hour);
@@ -301,7 +301,7 @@ while (TRUE)
 			todayRefreshed = TRUE;
 		}
 		else if (tomorowsPrice != NULL) {
-			todaysPrice = malloc(strlen(tomorowsPrice) + 1);
+			todaysPrice = (char*)malloc(strlen(tomorowsPrice) + 1);
 			if (todaysPrice != NULL) {
 				strcpy(todaysPrice, tomorowsPrice);
 				setlogtext(todaysPrice);
