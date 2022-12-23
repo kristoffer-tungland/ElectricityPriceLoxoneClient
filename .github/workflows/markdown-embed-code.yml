@@ -36,6 +36,17 @@ jobs:
       - name: Build Update Hour Prices release
         run: msbuild .\UpdateHourPrices\UpdateHourPrices.vcxproj -t:rebuild -verbosity:diag -property:Configuration=Release
 
+      - name: Build Test Hour Prices release
+        run: msbuild .\Tests\UpdateHourPrices.Tests\UpdateHourPrices.Tests.vcxproj -t:rebuild -verbosity:diag -property:Configuration=Release
+
+      - name: Setup VSTest and add to PATH
+        uses: darenm/Setup-VSTest@v1
+        id: setup_vstest
+
+      - name: Run VSTest
+        id: run_vstest
+        run: vstest.console.exe .\Tests\UpdateHourPrices.Tests\Release\UpdateHourPrices.Tests.obj
+
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with: 
