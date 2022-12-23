@@ -15,7 +15,7 @@ namespace UpdateHourPricesTests
 		{
 			char* averagePrices = getAveragePrices("no2", "NOK");
 
-
+			Assert::AreEqual("va", "");
 		}
 	};
 }
