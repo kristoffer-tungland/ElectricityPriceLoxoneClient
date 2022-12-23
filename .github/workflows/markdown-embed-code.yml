@@ -45,7 +45,7 @@ jobs:
 
       - name: Run VSTest
         id: run_vstest
-        run: vstest.console.exe ..\Release\UpdateHourPrices.Tests.dll
+        run: vstest.console.exe .\Tests\UpdateHourPrices.Tests\Release\UpdateHourPrices.Tests.dll
 
       - name: Setup Node.js
         uses: actions/setup-node@v3
